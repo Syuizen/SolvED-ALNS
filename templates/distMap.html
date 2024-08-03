@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>MOPTA - SolvED</title>
+        <h1>MOPTA2021 H-SARA user-interface (SolvED team)</h1>
+        <!-- Map Header-->
+        {{ hdr_txt }}
+
+        <link rel="stylesheet" href="{{ url_for('static',filename='styles/bootstrap.min.css') }}">
+    </head>
+    <style>
+        #overlay {
+            background: #ffffff;
+            color: #666666;
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            z-index: 5000;
+            top: 0;
+            left: 0;
+            float: left;
+            text-align: center;
+            padding-top: 25%;
+            opacity: .80;
+            }
+    </style>
+    <div id="overlay" style="display:none;">
+        <div class="spinner-border" style="width: 10rem; height: 10rem;" role="status">
+        </div>
+        <span> Loading </span>
+    </div>
+    <body>
+        <div style="width:65%;height:80%;margin:2% 1%;float:left;">
+            {{ map_div }}
+        </div>
+        <div style="width:30%;height:90%;margin:2% 1%;float:right;">
+            <form action="/tableMap", method="POST">
+                <p>Number of customer nodes: <b> {{n_customer}} <input type = "hidden" value="{{n_customer}}" name="n_customer"/></b></p>
+                <p>Number of teams: <b>{{n_team}}<input type = "hidden" value="{{n_team}}" name="n_team"/></b></p>
+                <input type = "hidden" value="{{tw_width}}" name="time_window_width"/>
+                <input type = "hidden" value="{{tw_width_2}}" name="time_window_width_2"/>
+                <p>
+                    <p>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-outline-warning btn-lg" hidden>
+                          <input type="radio" value="1" name="select_method"> Exact Method
+                        </label>
+                        <label class="btn btn-outline-warning active">
+                          <input type="radio" value="2" name="select_method" checked> Heuristic Method
+                        </label>
+                      </div>
+                    </p>
+                    <p><button class="btn btn-outline-primary btn-lg" type = "submit" value=""> Schedule it! </button></p>
+                </p>
+            </form>
+        </div>
+    </body>
+
+    <script>
+            {{ script_txt }}
+    </script>
+    <script>
+        $(document).ready(function() {
+            $(':submit').click(function(){
+                $('#overlay').fadeIn();
+            });
+        });
+    </script>
+</html>

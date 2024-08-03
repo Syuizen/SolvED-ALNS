@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>MOPTA - SolvED</title>
+        <h1>MOPTA2021 H-SARA user-interface (SolvED team)</h1>
+        <!-- Map Header-->
+        {{ hdr_txt }}
+
+        <link rel="stylesheet" href="{{ url_for('static',filename='styles/bootstrap.min.css') }}">
+    </head>
+    <style>
+        #overlay {
+            background: #ffffff;
+            color: #666666;
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            z-index: 5000;
+            top: 0;
+            left: 0;
+            float: left;
+            text-align: center;
+            padding-top: 25%;
+            opacity: .80;
+            }
+    </style>
+    <div id="overlay" style="display:none;">
+        <div class="spinner-border" style="width: 10rem; height: 10rem;" role="status">
+        </div>
+        <span> Loading </span>
+    </div>
+    <body>
+        <div style="width:65%;height:80%;margin:2% 1%;float:left;">
+            {{ map_div }}
+        </div>
+
+        <div style="width:30%;height:90%;margin:2% 1%;float:right;">
+            <form action="/distMap", method="GET">
+                <p>Number of customer nodes: <b> {{n_customer}} <input type = "hidden" value="{{n_customer}}" name="n_customer"/></b></p>
+                <p>Min number of teams: <b>{{min_team}}</b></p> 
+                <p>Max number of teams: <b>{{max_team}}</b></p>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text h-100"> Number of teams to hire</span>
+                    </div>
+                    <input calss="form-control" value="{{recommend_team}}" name="n_team"/>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text h-100">Time Window Width [Stage 1] (hour)</span>
+                    </div>
+                    <input calss="form-control" value="2" name="time_window_width"/>
+                    <div class="input-group-prepend">
+                        <span class="input-group-text h-100">Time Window Width [Stage 2] (hour)</span>
+                    </div>
+                    <input calss="form-control" value="0.5" name="time_window_width_2"/>
+                </div>
+                <p>
+                    <button class="btn btn-outline-primary" type="submit" value=""> Cluster! </button>
+                </p>
+            </form>
+        </div>
+    </body>
+
+    <script>
+            {{ script_txt }}
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('button').click(function(){
+                $('#overlay').fadeIn();
+            });
+        });
+    </script>
+</html>

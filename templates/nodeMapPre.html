@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>MOPTA - SolvED</title>
+        <h1>MOPTA2021 H-SARA user-interface (SolvED team)</h1>
+        <!-- Map Header-->
+        {{ hdr_txt }}
+
+        <link rel="stylesheet" href="{{ url_for('static',filename='styles/bootstrap.min.css') }}">
+    </head>
+    <style>
+        .input-group>.input-group-prepend {
+            flex: 0 0 50%;
+        }
+        .input-group .input-group-text {
+            width: 100%;
+        }
+        #overlay {
+            background: #ffffff;
+            color: #666666;
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            z-index: 5000;
+            top: 0;
+            left: 0;
+            float: left;
+            text-align: center;
+            padding-top: 25%;
+            opacity: .80;
+            }
+
+    </style>
+    <div id="overlay" style="display:none;">
+        <div class="spinner-border" style="width: 10rem; height: 10rem;" role="status">
+        </div>
+        <span> Loading </span>
+    </div>
+
+    <body>
+        <div style="width:60%;height:80%;margin:2% 1%;float:left;">
+            {{ map_div }}
+        </div>
+
+        <div style="width:30%;height:80%;margin:2% 1%;float:right;">
+            <form action="/nodeMap", method="POST">
+                <p>Number of customer nodes: <b> {{n_customer}} <input type = "hidden" value="{{n_customer}}" name="n_customer"/></b></p>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text h-100"> Cancel Rate</span>
+                    </div>
+                    <input class="form-control" value="{{params.cancel_rate}}" name="cancel_rate" aria-label="percentage" aria-describedby="basic-addon1"/>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text h-100"> Max Workload (hour)</span>
+                    </div>
+                    <input class="form-control" value="{{params.workload}}" name="workload" aria-label="per km" aria-describedby="basic-addon1"/>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text h-100"> Unit Travel Time Cost (per hour)</span>
+                    </div>
+                    <input class="form-control" value="{{params.cost_travel}}" name="cost_travel" aria-label="per km" aria-describedby="basic-addon1"/>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text h-100"> Overtime Cost (per hour)</span>
+                    </div>
+                    <input class="form-control" value="{{params.cost_overtime}}" name="cost_overtime" aria-label="per hour" aria-describedby="basic-addon1"/>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text h-100"> Team Hiring Cost (per team)</span>
+                    </div>
+                    <input class="form-control" value="{{params.cost_hire}}" name="cost_hire" aria-label="per team" aria-describedby="basic-addon1"/>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text h-100"> Worker Idle Time Cost (per hour)</span>
+                    </div>
+                    <input class="form-control" value="{{params.cost_idle}}" name="cost_idle" aria-label="per km" aria-describedby="basic-addon1"/>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text h-100"> Customer Wait Time Cost (per hour)</span>
+                    </div>
+                    <input class="form-control" value="{{params.cost_wait}}" name="cost_wait" aria-label="per km" aria-describedby="basic-addon1"/>
+                </div>
+                <button class="btn btn-outline-primary btn-lg btn-block" type = "submit" value= ""> GO! </button>
+            </form>
+        </div>
+    </body>
+
+    <script>
+            {{ script_txt }}
+    </script>
+    <script>
+        $(document).ready(function() {
+            $(':submit').click(function(){
+                $('#overlay').fadeIn();
+            });
+        });
+    </script>
+</html>

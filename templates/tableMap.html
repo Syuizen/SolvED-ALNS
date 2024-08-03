@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>MOPTA - SolvED</title>
+        <h1>MOPTA2021 H-SARA user-interface (SolvED team)</h1>
+        <!-- Map Header-->
+        {{ hdr_txt }}
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/bootstrap-table.min.css')}}">
+    </head>
+    <script src="{{ url_for('static', filename='scripts/bootstrap-table.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='scripts/bootstrap-table-filter-control.min.js')}}"></script>
+    <style>
+        .my-custom-scrollbar {
+        position: relative;
+        height: 90%;
+        width: 100%;
+        overflow: auto;
+        }
+        .table-wrapper-scroll-y {
+        display: block;
+        }
+        .table th{
+            text-align: center;
+        }
+        .table td{
+            text-align: center;
+        }
+    </style>
+    <style>
+        #overlay {
+            background: #ffffff;
+            color: #666666;
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            z-index: 5000;
+            top: 0;
+            left: 0;
+            float: left;
+            text-align: center;
+            padding-top: 25%;
+            opacity: .80;
+            }
+    </style>
+    <div id="overlay" style="display:none;">
+        <div class="spinner-border" style="width: 10rem; height: 10rem;" role="status">
+        </div>
+        <span> Loading </span>
+    </div>
+    <body>
+        <div style="width:40%;height:80%;margin:2% 1%;float:left;">
+            {{ map_div }}
+        </div>
+        <div style="width:50%;height:80%;margin:2% 1%;float:right;">
+            <form action="/tableMap" style="height:90%" method='POST'>
+                <input type = "hidden" value="{{n_customer}}" name="n_customer"/>
+                <input type = "hidden" value="{{n_team}}" name="n_team"/>
+                <input type = "hidden" value="{{tw_width}}" name="time_window_width"/>
+                <input type = "hidden" value="{{tw_width_2}}" name="time_window_width_2"/>
+                <p style="float:right">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    {% if select_method == 1 %}
+                    <label class="btn btn-outline-warning active">
+                        <input type="radio" value="1" name="select_method" checked> Exact Method
+                    {% else %}
+                    <label class="btn btn-outline-warning">
+                        <input type="radio" value="1" name="select_method"> Exact Method
+                    {% endif %}
+                    </label>
+                    {% if select_method == 2 %}
+                    <label class="btn btn-outline-warning active">
+                        <input type="radio" value="2" name="select_method" checked> Heuristic Method
+                    {% else %}
+                    <label class="btn btn-outline-warning">
+                        <input type="radio" value="2" name="select_method"> Heuristic Method
+                    {% endif %}
+                    </label>
+                    </div>
+                <p>
+            <div class= "table-wrapper-scroll-y my-custom-scrollbar">
+                <table id="timeTable" 
+                        data-filter-control="true"
+                        data-show-search-clear-button="true"
+                        class="table table-striped">
+                    <thead>
+                        <tr>
+                        {% for c in table.header %}
+                            {% if c == 'team' %}
+                                <th class="align-middle" scope="col" data-field="{{c}}" data-filter-control="select" data-sortable="true">{{ c }}</th>
+                            {% else %}
+                                <th class="align-middle" scope="col" data-field="{{c}}" data-filter-control="input" data-sortable="true">{{ c }}</th>
+                            {% endif %}
+                        {% endfor %}
+                            <th class="align-middle" scope="col" data-field="status">Active</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for r in table.data %}
+                            <tr>
+                                {% for v in r.val %}
+                                <td class="align-middle">
+                                    {{v}}
+                                </td>
+                                {% endfor %}
+                                <td class="align-middle">
+                                    <div class="form-check">
+                                        {% if r.disable  %}
+                                            <input class="form-check-input" type="checkbox" unchecked disabled name="{{r.name}}">
+                                        {% else %}
+                                            <input class="form-check-input" type="checkbox" checked name="{{r.name}}">
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn btn-outline-primary btn-lg btn-block" style="margin-top: 1%" type = "submit" value= "" name="reschedule"> Re-Schedule/Tighten Time Window!</button>
+            </p>
+        </form>
+        <form action="/evaluateMap" style="margin-top: 3%" method='POST'>
+            <button class="btn btn-outline-success btn-lg btn-block"  type="submit"  value= "" name="evaluate"> Go to Evaluate!</button>
+        </form>
+        </div>
+    </body>
+
+    <script>
+            {{ script_txt }}
+    </script>
+    <script>
+        $(function() {
+          $('#timeTable').bootstrapTable()
+        })
+      </script>
+      <script>
+        $(document).ready(function() {
+            $(':submit').click(function(){
+                $('#overlay').fadeIn();
+            });
+        });
+    </script>
+</html>

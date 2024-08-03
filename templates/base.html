@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>MOPTA - SolvED</title>
+        <h1>MOPTA2021 H-SARA user-interface (SolvED team)</h1>
+        <!-- Map Header-->
+        {{ hdr_txt }}
+
+        <link rel="stylesheet" href="{{ url_for('static',filename='styles/bootstrap.min.css') }}">
+    </head>
+    <style>
+        #overlay {
+            background: #ffffff;
+            color: #666666;
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            z-index: 5000;
+            top: 0;
+            left: 0;
+            float: left;
+            text-align: center;
+            padding-top: 25%;
+            opacity: .80;
+            }
+    </style>
+    <div id="overlay" style="display:none;">
+        <div class="spinner-border" style="width: 10rem; height: 10rem;" role="status">
+        </div>
+        <span> Loading </span>
+    </div>
+
+    <body>
+        {% if displayalert == 1 %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Fail to import file!</strong> The file uploaded does not match the required format!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+            </div>
+        {% endif %}
+        <div style="width:75%;height:80%;margin:2% 1%;float:left;">
+            {{ map_div }}
+        </div>
+
+        <div style="width:20%;height:90%;margin:2% 1%;float:right;">
+            <form action="/nodeMapPreSetting", method="POST">
+                <p>Number of customer nodes: <input type = "number" min="1" name="n_customer"/></p>
+                <p><button class="btn btn-outline-primary btn-lg" type = "submit" value= ""> Generate nodes </button></p>
+            </form>
+            <h4>File Upload</h4>
+            <p><b>File format: name, x, y</b></p>
+            <p>File must be stored in the folder <b><i>uploads</i></b></p>
+            <form method="POST" action="/upload" enctype="multipart/form-data">
+                <p><input type="file" name="file" accept=".csv, .xlsx"></p>
+                <p><button class="btn btn-outline-secondary btn-lg" type = "submit" value= ""> Submit </button></p>
+            </form>
+        </div>
+    </body>
+
+    <script>
+            {{ script_txt }}
+    </script>
+     <script>
+        $(document).ready(function() {
+            $(':submit').click(function(){
+                $('#overlay').fadeIn();
+            });
+        });
+    </script>
+</html>
